@@ -38,8 +38,10 @@ function useSearch (){
 }
 
 function App() {
+  const [sort, setSort] = useState(false)
+
   const {search, setSearch, error} = useSearch()
-  const {movies, loading, getMovies} = useMovies({search})
+  const {movies, loading, getMovies} = useMovies({search, sort})
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -50,6 +52,10 @@ function App() {
     const newQuery = event.target.value
     if (newQuery.startsWith(' ')) return
     setSearch(newQuery)
+  }
+
+  const handleSort = () =>{
+    setSort(!sort)
   }
     return (
     <div className='page'>
@@ -64,6 +70,7 @@ function App() {
           style={{border: '1px solid transparent', borderColor: error ? 'red' : 'green'}}
           // ref={inputRef}
           placeholder='Avengers, Star Wars, Rey León...' />
+          <input type="checkbox" checked={sort} onChange={handleSort}/>
         <button type="submit">Buscar</button>
       </form>
       {error && <p style={{color:'red'}} className='error'>{error}</p>}
