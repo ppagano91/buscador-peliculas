@@ -9,7 +9,7 @@ export const useMovies = ({search, sort}) => {
 
     const getMovies = useMemo(() => 
     {
-        return async () => {
+        return async ({ search }) => {
             if (search === previousSearch.current) return
 
             try{
