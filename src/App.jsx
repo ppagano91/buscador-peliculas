@@ -1,14 +1,20 @@
 
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
 
 function useSearch (){
   const [search, setSearch] = useState("")
   const [error, setError] = useState(null)
+  const isFirstInput = useRef(true)
 
   useEffect(() => {
+    if (isFirstInput.current){
+      isFirstInput.current = search === ''
+      return
+    }
+
     if (search === '') {
       setError('Debe ingresar un texto para iniciar la búsqueda')      
       return
@@ -32,11 +38,12 @@ function useSearch (){
 }
 
 function App() {
-  const {movies} = useMovies()
   const {search, setSearch, error} = useSearch()
+  const {movies, getMovies} = useMovies({search})
 
   const handleSubmit = (event) => {
     event.preventDefault()
+    getMovies()
   }
 
   const handleChange = (event) =>{
@@ -44,10 +51,6 @@ function App() {
     if (newQuery.startsWith(' ')) return
     setSearch(newQuery)
   }
-
-  
-
-
     return (
     <div className='page'>
     <header>
